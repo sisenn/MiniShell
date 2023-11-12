@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yokten <yokten@student.42.fr>              +#+  +:+       +#+        */
+/*   By: sisen <sisen@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/06 20:08:49 by yokten            #+#    #+#             */
-/*   Updated: 2023/11/06 20:32:39 by yokten           ###   ########.fr       */
+/*   Updated: 2023/11/12 21:01:19 by sisen            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,11 +22,11 @@ void	init_lexer(t_core *g_core)
 
 void	init_env(char **env, t_core *core)
 {
-	while(env[core->i])
+	while (env[core->i])
 		core->i++;
-	core->env = malloc(sizeof(char *) * core->i + 1);
+	core->env = malloc(sizeof(char *) * (core->i + 1));
 	core->i = -1;
-	while(env[++core->i])
+	while (env[++core->i] && env[core->i] != 0)
 		core->env[core->i] = ft_strdup(env[core->i]);
 	core->env[core->i] = NULL;
 	core->i = 0;
@@ -37,8 +37,8 @@ int	check_redirection(t_core *core)
 	int	a;
 
 	a = core->i;
-	if ((core->input[core->i] == '<' && core->input[core->i + 1] != '>') || \
-		(core->input[core->i] == '>' && core->input[core->i + 1] != '<'))
+	if ((core->input[core->i] == '<' && core->input[core->i + 1] != '>')
+		|| (core->input[core->i] == '>' && core->input[core->i + 1] != '<'))
 		core->i += 1;
 	if (core->input[core->i] == core->input[core->i - 1])
 		core->i += 1;
@@ -52,7 +52,7 @@ int	check_redirection(t_core *core)
 		core->i++;
 		return (1);
 	}
-		return (0);
+	return (0);
 }
 
 int	check_Q(t_core *core)
@@ -103,19 +103,19 @@ int	check_Q(t_core *core)
 
 int	check_operator(t_core *core)
 {
-	if (core->input[core->i] && core->input[core->i] != ' ' && \
-		core->input[core->i] != '|' && core->input[core->i] != '<' && \
-		core->input[core->i] != '>')
-		{
-			/* if (core->input[core->i] == '$')
-				ft_expander(core); */
-			return (1);
-		}
+	if (core->input[core->i] && core->input[core->i] != ' '
+		&& core->input[core->i] != '|' && core->input[core->i] != '<'
+		&& core->input[core->i] != '>')
+	{
+		/* if (core->input[core->i] == '$')
+			ft_expander(core); */
+		return (1);
+	}
 	else
 		return (0);
 }
 
-int	control_quote(t_core	*core)
+int	control_quote(t_core *core)
 {
 	core->i = 0;
 	core->control34 = 0;
@@ -133,7 +133,7 @@ int	control_quote(t_core	*core)
 	return (1);
 }
 
-void	leximus(t_core	*core)
+void	leximus(t_core *core)
 {
 	core->flag = 1;
 	core->lexer_head = core->lexer;
@@ -181,12 +181,13 @@ void	leximus(t_core	*core)
 				core->lexer->type = 2;
 			while (check_operator(core))
 				core->i++;
-			core->lexer->content = malloc(sizeof(char) * \
-				(core->i - core->k + 1));
+			core->lexer->content = malloc(sizeof(char) * (core->i - core->k
+					+ 1));
 			core->i = core->k;
 			while (check_operator(core))
 			{
-				if ((core->input[core->i] == 34) || (core->input[core->i] == 39))
+				if ((core->input[core->i] == 34)
+					|| (core->input[core->i] == 39))
 					core->i++;
 				else
 				{
@@ -198,8 +199,8 @@ void	leximus(t_core	*core)
 			core->lexer->content[core->j] = '\0';
 		}
 		if (core->input[core->i] != '\0')
-			lexer_lstadd_back(&(core)->lexer, \
-			lexer_listnew(ft_strdup(core->lexer->content)));
+			lexer_lstadd_back(&(core)->lexer,
+				lexer_listnew(ft_strdup(core->lexer->content)));
 		core->j = 0;
 		core->lexer = core->lexer->next;
 	}
@@ -213,27 +214,31 @@ void	flush_the_terminal(void)
 
 void	print_env(t_core *core)
 {
-	core->i = -1;
-	while(core->env[++core->i])
-		printf("%s\n", core->env[core->i]);
+	core->i = 0;
+	while (core->env[core->i] && core->env[core->i] != NULL)
+		printf("%s\n", core->env[core->i++]);
 }
 
 /* char	*ft_expander(t_core *core)
 {
+	t_core	*g_core;
+	t_core	*g_core;
+	t_core	*g_core;
+
 	core->expanded = NULL;
 	while (core->env[core->i])
-		if (ft_strncmp(core->env[core->i]), , ft_strlen()) //$inputu yazılacak buraya
+		if (ft_strncmp(core->env[core->i]), , ft_strlen())
+			//$inputu yazılacak buraya
 			core->expanded = ft_split(core->env[core->i], '=');
 	if (core->expanded != NULL)
 		return (core->expanded[1]);
 	else
 		return (NULL);
 } */
-
-//düz e ve < seg fault veriyor
-//enter env listliyor wtf?
-//e env bastırıp seg veriyor???
-
+// düz e ve < seg fault veriyor
+// enter env listliyor wtf?
+// e env bastırıp seg veriyor???
+// fix the seg of third
 int	main(int argc, char **argv, char **env)
 {
 	t_core	*g_core;
@@ -256,13 +261,11 @@ int	main(int argc, char **argv, char **env)
 				printf("tırnak hatası");
 			leximus(g_core);
 		}
-/* 		while (g_core->lexer_head)
+		if (*g_core->input != '\0')
 		{
-			printf("%s\n", g_core->lexer_head->content);
-			g_core->lexer_head = g_core->lexer_head->next;
-		} */	
-		if (!ft_strncmp(g_core->input, "env", ft_strlen(g_core->input)))
-			print_env(g_core);
-		ft_builtins(g_core);
+			if (!ft_strncmp(g_core->input, "env", 3))
+				print_env(g_core);
+			ft_builtins(g_core);
+		}
 	}
 }

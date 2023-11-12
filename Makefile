@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: yokten <yokten@student.42.fr>              +#+  +:+       +#+         #
+#    By: sisen <sisen@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/11/06 20:04:22 by yokten            #+#    #+#              #
-#    Updated: 2023/11/06 20:04:23 by yokten           ###   ########.fr        #
+#    Updated: 2023/11/12 21:53:49 by sisen            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -21,9 +21,9 @@ SRCS	=	main.c				\
 			utils.c 			\
 			lexer_list.c		\
 			error_handling.c	\
-			env_list.c 			\
 			malloc.c			\
 			builtins.c			\
+			builtins2.c			\
 
 
 OBJS = $(SRCS:.c=.o)
@@ -55,8 +55,9 @@ fclean: clean
 
 re:	fclean all
 
-git: git add . |
-	 git commit -m "auto commit" |
-	 git push
+git: 
+	git add .
+	git commit -m "auto commit"
+	git push
 
 .PHONY: all, clean, fclean, re

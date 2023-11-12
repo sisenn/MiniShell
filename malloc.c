@@ -12,12 +12,3 @@ void init_core(t_core *core)
 	core->env = NULL;
 	core->expanded = NULL;
 }
-
-void    add_malloc(t_core   *core)
-{
-    core->lexer = malloc(sizeof(t_lexer));
-    if (!core->lexer)
-        
-    core->env = malloc(sizeof(t_env));
-
-}
