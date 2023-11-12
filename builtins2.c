@@ -6,9 +6,13 @@
 /*   By: sisen <sisen@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/12 18:40:37 by sisen             #+#    #+#             */
-/*   Updated: 2023/11/12 18:48:42 by sisen            ###   ########.fr       */
+/*   Updated: 2023/11/12 22:18:28 by sisen            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "./minishell.h"
 
+void	ft_pwd_management(t_core	*core)
+{
+	core->lexer->
+}

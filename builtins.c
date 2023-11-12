@@ -18,7 +18,6 @@ void	ft_unset_management(t_core *core)
 				core->env[core->i] = core->env[core->i + 1];
 				core->i++;
 			}
-			free(core->env[core->i]);
 			return ;
 		}
 	}
@@ -37,13 +36,13 @@ void	ft_builtins(t_core *core)
 		else if (!ft_strncmp(core->lexer->content, "exit", 4)
 			&& ft_strlen(core->lexer->content) == 4)
 			ft_exit_management(core);
+		else if (ft_strncmp(core->lexer->content, "pwd", 3)
+			&& ft_strlen(core->lexer->content) == 3)
+			ft_pwd_management(core);
 	}
 }
 
 		// else if (ft_strncmp(core->lexer->content, "cd",
-		// ft_strlen(core->lexer->content)))
-		//  ft_cd_management(core);
-		// else if (ft_strncmp(core->lexer->content, "pwd",
 		// ft_strlen(core->lexer->content)))
 		// ft_pwd_management(core);
 		/*         

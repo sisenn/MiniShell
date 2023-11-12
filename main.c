@@ -6,7 +6,7 @@
 /*   By: sisen <sisen@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/06 20:08:49 by yokten            #+#    #+#             */
-/*   Updated: 2023/11/12 21:01:19 by sisen            ###   ########.fr       */
+/*   Updated: 2023/11/12 22:09:09 by sisen            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -235,10 +235,9 @@ void	print_env(t_core *core)
 	else
 		return (NULL);
 } */
-// düz e ve < seg fault veriyor
-// enter env listliyor wtf?
-// e env bastırıp seg veriyor???
+
 // fix the seg of third
+// mallocların hepsi calloc olacak
 int	main(int argc, char **argv, char **env)
 {
 	t_core	*g_core;
