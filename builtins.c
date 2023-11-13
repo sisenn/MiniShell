@@ -41,11 +41,12 @@ void	ft_builtins(t_core *core)
 		else if (!ft_strncmp(core->lexer->content, "env", 3)
 			&& ft_strlen(core->lexer->content) == 3)
 			ft_env_management(core);
+		else if (!ft_strncmp(core->lexer->content, "cd", 2)
+			&& ft_strlen(core->lexer->content) == 2)
+			ft_chdir(core);
 	}
 }
 
-		// else if (ft_strncmp(core->lexer->content, "cd",
-		// ft_strlen(core->lexer->content)))
 		// ft_pwd_management(core);
 		/*         
 				else if (ft_strncmp(core->lexer->content, "export",

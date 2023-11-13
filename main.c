@@ -6,7 +6,7 @@
 /*   By: sisen <sisen@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/06 20:08:49 by yokten            #+#    #+#             */
-/*   Updated: 2023/11/13 10:56:57 by sisen            ###   ########.fr       */
+/*   Updated: 2023/11/13 12:11:18 by sisen            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -198,6 +198,8 @@ void	leximus(t_core *core)
 			}
 			core->lexer->content[core->j] = '\0';
 		}
+		while (core->input[core->i] == ' ')
+			core->i++;
 		if (core->input[core->i] != '\0')
 			lexer_lstadd_back(&(core)->lexer,
 				lexer_listnew(ft_strdup(core->lexer->content)));
@@ -212,13 +214,6 @@ void	flush_the_terminal(void)
 	printf("\033[001;1H\033[2J");
 }
 
-/*void	print_env(t_core *core)
-{
-	core->i = 0;
-	while (core->env[core->i] && core->env[core->i] != NULL)
-		printf("%s\n", core->env[core->i++]);
-}
-*/
 /* char	*ft_expander(t_core *core)
 {
 	t_core	*g_core;
@@ -238,6 +233,7 @@ void	flush_the_terminal(void)
 
 // fix the seg of third
 // mallocların hepsi calloc olacak
+// seri readline kullanımı seggy fucky
 int	main(int argc, char **argv, char **env)
 {
 	t_core	*g_core;
@@ -249,10 +245,11 @@ int	main(int argc, char **argv, char **env)
 	(void)argc;
 	(void)argv;
 	(void)env;
+	g_core->readline = ft_strjoin(g_core->pwd, " > monkeys 🙉🙊🙈 :\033[0;37m ");
 	while (1)
 	{
 		init_lexer(g_core);
-		g_core->input = readline(">monkeys: ");
+		g_core->input = readline(g_core->readline);
 		add_history(g_core->input);
 		if (g_core->input)
 		{
@@ -261,10 +258,6 @@ int	main(int argc, char **argv, char **env)
 			leximus(g_core);
 		}
 		if (*g_core->input != '\0')
-		{
-	/*		if (!ft_strncmp(g_core->input, "env", 3))
-				print_env(g_core);*/
 			ft_builtins(g_core);
-		}
 	}
 }
