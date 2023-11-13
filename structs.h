@@ -6,7 +6,7 @@
 /*   By: sisen <sisen@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/06 20:04:30 by yokten            #+#    #+#             */
-/*   Updated: 2023/11/12 20:07:00 by sisen            ###   ########.fr       */
+/*   Updated: 2023/11/13 10:00:35 by sisen            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,7 @@ typedef struct s_core
 	int				flag;
 	int				err_code;
 	char			*env_joined;
+	char			*pwd;
 }	t_core;
 
 #endif

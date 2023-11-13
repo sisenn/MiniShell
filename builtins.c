@@ -1,6 +1,5 @@
 #include "minishell.h"
 
-
 //fix the seg of third
 void	ft_unset_management(t_core *core)
 {
@@ -36,9 +35,12 @@ void	ft_builtins(t_core *core)
 		else if (!ft_strncmp(core->lexer->content, "exit", 4)
 			&& ft_strlen(core->lexer->content) == 4)
 			ft_exit_management(core);
-		else if (ft_strncmp(core->lexer->content, "pwd", 3)
+		else if (!ft_strncmp(core->lexer->content, "pwd", 3)
 			&& ft_strlen(core->lexer->content) == 3)
 			ft_pwd_management(core);
+		else if (!ft_strncmp(core->lexer->content, "env", 3)
+			&& ft_strlen(core->lexer->content) == 3)
+			ft_env_management(core);
 	}
 }
 
@@ -48,10 +50,7 @@ void	ft_builtins(t_core *core)
 		/*         
 				else if (ft_strncmp(core->lexer->content, "export",
 						ft_strlen(core->lexer->content)))
-					ft_export_management(core);
-				else if (ft_strncmp(core->lexer->content, "env",
-						ft_strlen(core->lexer->content)))
-					ft_env_management(core); */
+					ft_export_management(core); */
 
 int	echo_n_control(t_core *core)
 {

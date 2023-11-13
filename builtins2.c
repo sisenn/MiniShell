@@ -1,18 +1,15 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   builtins2.c                                        :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: sisen <sisen@student.42.fr>                +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/11/12 18:40:37 by sisen             #+#    #+#             */
-/*   Updated: 2023/11/12 22:18:28 by sisen            ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
 
 #include "./minishell.h"
 
 void	ft_pwd_management(t_core	*core)
 {
-	core->lexer->
+	core->pwd = getcwd(core->pwd, 0);
+	printf("%s\n", core->pwd);
+}
+
+void	ft_env_management(t_core	*core)
+{
+	core->i = 0;
+	while (core->env[core->i] && core->env[core->i] != NULL)
+		printf("%s\n", core->env[core->i++]);
 }

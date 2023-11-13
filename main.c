@@ -6,7 +6,7 @@
 /*   By: sisen <sisen@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/06 20:08:49 by yokten            #+#    #+#             */
-/*   Updated: 2023/11/12 22:09:09 by sisen            ###   ########.fr       */
+/*   Updated: 2023/11/13 10:56:57 by sisen            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ void	init_env(char **env, t_core *core)
 		core->i++;
 	core->env = malloc(sizeof(char *) * (core->i + 1));
 	core->i = -1;
-	while (env[++core->i] && env[core->i] != 0)
+	while (env[++core->i])
 		core->env[core->i] = ft_strdup(env[core->i]);
 	core->env[core->i] = NULL;
 	core->i = 0;
@@ -212,13 +212,13 @@ void	flush_the_terminal(void)
 	printf("\033[001;1H\033[2J");
 }
 
-void	print_env(t_core *core)
+/*void	print_env(t_core *core)
 {
 	core->i = 0;
 	while (core->env[core->i] && core->env[core->i] != NULL)
 		printf("%s\n", core->env[core->i++]);
 }
-
+*/
 /* char	*ft_expander(t_core *core)
 {
 	t_core	*g_core;
@@ -262,8 +262,8 @@ int	main(int argc, char **argv, char **env)
 		}
 		if (*g_core->input != '\0')
 		{
-			if (!ft_strncmp(g_core->input, "env", 3))
-				print_env(g_core);
+	/*		if (!ft_strncmp(g_core->input, "env", 3))
+				print_env(g_core);*/
 			ft_builtins(g_core);
 		}
 	}
