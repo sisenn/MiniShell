@@ -9,6 +9,7 @@ void	init_core(t_core *core)
 	core->t = 0;
 	core->flag = 0;
 	core->err_code = 0;
+	core->swap = NULL;
 	core->env = NULL;
 	core->expanded = NULL;
 	core->pwd = ft_strjoin("\033[0;35m", getcwd(core->pwd, 0));

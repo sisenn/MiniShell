@@ -22,6 +22,7 @@ void	ft_unset_management(t_core *core)
 	}
 }
 
+//make a core->integer 0er function, call it at the start of this func, check other funcs to see if it works as well
 void	ft_builtins(t_core *core)
 {
 	if (core->lexer->type == 1)
@@ -44,14 +45,14 @@ void	ft_builtins(t_core *core)
 		else if (!ft_strncmp(core->lexer->content, "cd", 2)
 			&& ft_strlen(core->lexer->content) == 2)
 			ft_chdir(core);
+		else if (!ft_strncmp(core->lexer->content, "export", 6)
+			&& ft_strlen(core->lexer->content) == 6)
+			ft_export_management(core);
+		//clear için yusufun kodu yapıştır
 	}
 }
 
-		// ft_pwd_management(core);
-		/*         
-				else if (ft_strncmp(core->lexer->content, "export",
-						ft_strlen(core->lexer->content)))
-					ft_export_management(core); */
+		// ft_pwd_management(core);    
 
 int	echo_n_control(t_core *core)
 {

@@ -6,7 +6,7 @@
 /*   By: sisen <sisen@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/06 20:08:49 by yokten            #+#    #+#             */
-/*   Updated: 2023/11/13 12:11:18 by sisen            ###   ########.fr       */
+/*   Updated: 2023/11/15 19:54:00 by sisen            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,18 @@ void	init_env(char **env, t_core *core)
 	while (env[++core->i])
 		core->env[core->i] = ft_strdup(env[core->i]);
 	core->env[core->i] = NULL;
+	core->i = 0;
+}
+
+void	init_export(char **env, t_core *core)
+{
+	while (env[core->i])
+		core->i++;
+	core->export = malloc(sizeof(char *) * (core->i + 1));
+	core->i = -1;
+	while (env[++core->i])
+		core->export[core->i] = ft_strdup(env[core->i]);
+	core->export[core->i] = NULL;
 	core->i = 0;
 }
 
@@ -242,9 +254,9 @@ int	main(int argc, char **argv, char **env)
 	g_core = malloc(sizeof(t_core));
 	init_core(g_core);
 	init_env(env, g_core);
+	init_export(env, g_core);
 	(void)argc;
 	(void)argv;
-	(void)env;
 	g_core->readline = ft_strjoin(g_core->pwd, " > monkeys 🙉🙊🙈 :\033[0;37m ");
 	while (1)
 	{
