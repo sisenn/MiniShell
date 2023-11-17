@@ -3,7 +3,10 @@
 
 void	ft_pwd_management(t_core	*core)
 {
-	core->pwd = getcwd(core->pwd, 0);
+	char	*str;
+
+	str = NULL;
+	core->pwd = getcwd(str, 0);
 	printf("%s\n", core->pwd);
 }
 
@@ -40,7 +43,8 @@ void	add_to_export(t_core	*core)
 	core->i = 0;
 	while (core->export[core->i])
 		core->i++;
-	
+	free (core->export);
+	core->export = malloc(sizeof(char *) * core->i + 2);
 }
 
 void	ft_export_management(t_core	*core)
@@ -83,9 +87,7 @@ void	ft_export_management(t_core	*core)
 		}
 	}
 	else
-	{
-		add_to_export(core);
-	}
+		init_tmp(core);
 }
 
 /*	{

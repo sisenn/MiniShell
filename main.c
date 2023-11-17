@@ -6,7 +6,7 @@
 /*   By: sisen <sisen@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/06 20:08:49 by yokten            #+#    #+#             */
-/*   Updated: 2023/11/15 19:54:00 by sisen            ###   ########.fr       */
+/*   Updated: 2023/11/16 21:34:04 by sisen            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,22 @@ void	init_env(char **env, t_core *core)
 	core->i = 0;
 }
 
+/*void	export_env(t_core *core)
+{
+	char **tmp;
+	core->i = 0;
+	while(core->env[core->i++])
+		;
+	tmp = malloc(sizeof(char *) * (core->i + core->exp_env_size + 1));
+	while(core->env[core->i])
+		tmp[core->i] = ft_strdup(core->env[core->i++]);
+	core->i = 0;
+	while(core->exp_env_size > core->i)
+		tmp[core->i] = ft_strdup(core->exp_env[core->i++]);
+	tmp[core->i] = NULL;
+	core->env = tmp;
+}
+*/
 void	init_export(char **env, t_core *core)
 {
 	while (env[core->i])
@@ -79,8 +95,8 @@ int	check_Q(t_core *core)
 		core->i = core->k;
 		while (core->input[core->i] != 34 && core->input[core->i])
 		{
-			/* if (core->input[core->i] == '$')
-				ft_expander(core); */
+			if (core->input[core->i] == '$')
+				expander(core);
 			core->lexer->content[core->j] = core->input[core->i];
 			core->i++;
 			core->j++;
@@ -193,8 +209,8 @@ void	leximus(t_core *core)
 				core->lexer->type = 2;
 			while (check_operator(core))
 				core->i++;
-			core->lexer->content = malloc(sizeof(char) * (core->i - core->k
-					+ 1));
+			core->lexer->content = malloc(sizeof(char) * \
+					(core->i - core->k + 1));
 			core->i = core->k;
 			while (check_operator(core))
 			{
@@ -204,8 +220,15 @@ void	leximus(t_core *core)
 				else
 				{
 					core->lexer->content[core->j] = core->input[core->i];
-					core->i++;
 					core->j++;
+					core->i++;
+				}
+				core->i = 0;
+				while (core->lexer->content[core->i])
+				{
+					if (core->lexer->content[core->i] == '$')
+						expander(core);
+					core->i++;
 				}
 			}
 			core->lexer->content[core->j] = '\0';
@@ -246,6 +269,7 @@ void	flush_the_terminal(void)
 // fix the seg of third
 // mallocların hepsi calloc olacak
 // seri readline kullanımı seggy fucky
+//export =tirsiz eklemeyi düzelt
 int	main(int argc, char **argv, char **env)
 {
 	t_core	*g_core;

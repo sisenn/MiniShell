@@ -6,7 +6,7 @@
 #    By: sisen <sisen@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/11/06 20:04:22 by yokten            #+#    #+#              #
-#    Updated: 2023/11/12 21:53:49 by sisen            ###   ########.fr        #
+#    Updated: 2023/11/16 17:12:02 by sisen            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -24,6 +24,8 @@ SRCS	=	main.c				\
 			malloc.c			\
 			builtins.c			\
 			builtins2.c			\
+			export.c			\
+			expander.c			\
 
 
 OBJS = $(SRCS:.c=.o)

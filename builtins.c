@@ -48,7 +48,9 @@ void	ft_builtins(t_core *core)
 		else if (!ft_strncmp(core->lexer->content, "export", 6)
 			&& ft_strlen(core->lexer->content) == 6)
 			ft_export_management(core);
-		//clear için yusufun kodu yapıştır
+		else if (!ft_strncmp(core->lexer->content, "clear", 5)
+			&& ft_strlen(core->lexer->content) == 5)
+			printf("\e[1;1H\e[2J");
 	}
 }
 

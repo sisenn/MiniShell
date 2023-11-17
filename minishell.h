@@ -6,7 +6,7 @@
 /*   By: sisen <sisen@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/06 20:03:17 by yokten            #+#    #+#             */
-/*   Updated: 2023/11/16 08:33:09 by sisen            ###   ########.fr       */
+/*   Updated: 2023/11/16 14:58:54 by sisen            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,8 +34,12 @@ void	ft_exit_management(t_core	*core);
 void	ft_pwd_management(t_core	*core);
 void	ft_env_management(t_core	*core);
 void	ft_export_management(t_core	*core);
+void	env_and_exp(t_core	*core);
 void	add_to_export(t_core	*core);
 int		echo_n_control(t_core *core);
 void	ft_chdir(t_core	*core);
+void	init_tmp(t_core *core);
+void	expander(t_core *core);
+int		ft_strchr(const char *s, int c);
 
 #endif
