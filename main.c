@@ -3,61 +3,36 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sisen <sisen@student.42.fr>                +#+  +:+       +#+        */
+/*   By: yokten <yokten@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/06 20:08:49 by yokten            #+#    #+#             */
-/*   Updated: 2023/11/17 18:33:49 by sisen            ###   ########.fr       */
+/*   Updated: 2023/11/18 15:14:04 by yokten           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include <string.h>
 
-void	init_lexer(t_core *g_core)
+void	init_list(t_core *g_core)
 {
 	g_core->lexer = malloc(sizeof(t_lexer));
 	if (!g_core->lexer)
 		exit(0);
+	g_core->env = malloc(sizeof(t_env));
+	g_core->export = malloc(sizeof(t_export));
 }
 
-void	init_env(char **env, t_core *core)
+void	init_temp(char	**env, t_core *core)
 {
-	while (env[core->i])
-		core->i++;
-	core->env = malloc(sizeof(char *) * (core->i + 1));
-	core->i = -1;
-	while (env[++core->i])
-		core->env[core->i] = ft_strdup(env[core->i]);
-	core->env[core->i] = NULL;
-	core->i = 0;
-}
-
-/*void	export_env(t_core *core)
-{
-	char **tmp;
-	core->i = 0;
-	while(core->env[core->i++])
-		;
-	tmp = malloc(sizeof(char *) * (core->i + core->exp_env_size + 1));
-	while(core->env[core->i])
-		tmp[core->i] = ft_strdup(core->env[core->i++]);
-	core->i = 0;
-	while(core->exp_env_size > core->i)
-		tmp[core->i] = ft_strdup(core->exp_env[core->i++]);
-	tmp[core->i] = NULL;
-	core->env = tmp;
-}
-*/
-void	init_export(char **env, t_core *core)
-{
-	while (env[core->i])
-		core->i++;
-	core->export = malloc(sizeof(char *) * (core->i + 1));
-	core->i = -1;
-	while (env[++core->i])
-		core->export[core->i] = ft_strdup(env[core->i]);
-	core->export[core->i] = NULL;
-	core->i = 0;
+	while (env[core->t])
+		core->t++;
+	core->tmp = malloc(sizeof(char *) * (core->t + 1));
+	core->t = -1;
+	while (env[++core->t])
+		core->tmp[core->t] = ft_strdup(env[core->t]);
+	core->tmp[core->t] = NULL;
+	add_export(core);
+	add_env(core);
 }
 
 int	check_redirection(t_core *core)
@@ -95,13 +70,12 @@ int	check_Q(t_core *core)
 		core->i = core->k;
 		while (core->input[core->i] != 34 && core->input[core->i])
 		{
-			if (core->input[core->i] == '$')
-				expander(core);
 			core->lexer->content[core->j] = core->input[core->i];
 			core->i++;
 			core->j++;
 		}
 		core->lexer->content[core->j] = '\0';
+		expander(core);
 		if (core->input[core->i] != 34)
 			return (0);
 		core->i++;
@@ -134,11 +108,7 @@ int	check_operator(t_core *core)
 	if (core->input[core->i] && core->input[core->i] != ' '
 		&& core->input[core->i] != '|' && core->input[core->i] != '<'
 		&& core->input[core->i] != '>')
-	{
-		/* if (core->input[core->i] == '$')
-			ft_expander(core); */
 		return (1);
-	}
 	else
 		return (0);
 }
@@ -163,8 +133,8 @@ int	control_quote(t_core *core)
 
 void	leximus(t_core *core)
 {
-	core->flag = 1;
 	core->lexer_head = core->lexer;
+	core->flag = 1;
 	core->i = 0;
 	core->j = 0;
 	while (core->input[core->i])
@@ -204,16 +174,19 @@ void	leximus(t_core *core)
 			{
 				core->lexer->type = 1;
 				core->flag = 0;
+				
 			}
 			else
 				core->lexer->type = 2;
 			while (check_operator(core))
 				core->i++;
+			
 			core->lexer->content = malloc(sizeof(char) * \
 					(core->i - core->k + 1));
 			core->i = core->k;
 			while (check_operator(core))
 			{
+
 				if ((core->input[core->i] == 34)
 					|| (core->input[core->i] == 39))
 					core->i++;
@@ -223,23 +196,23 @@ void	leximus(t_core *core)
 					core->j++;
 					core->i++;
 				}
-				core->i = 0;
-				while (core->lexer->content[core->i])
-				{
-					if (core->lexer->content[core->i] == '$')
-						expander(core);
-					core->i++;
-				}
 			}
 			core->lexer->content[core->j] = '\0';
+			expander(core);
+
 		}
 		while (core->input[core->i] == ' ')
 			core->i++;
 		if (core->input[core->i] != '\0')
-			lexer_lstadd_back(&(core)->lexer,
+		{
+			lexer_lstadd_back(&core->lexer_head,
 				lexer_listnew(ft_strdup(core->lexer->content)));
+
+		}
 		core->j = 0;
-		core->lexer = core->lexer->next;
+
+		if (core->input[core->i] != '\0')
+			core->lexer = core->lexer->next;
 	}
 	core->lexer = core->lexer_head;
 }
@@ -248,23 +221,6 @@ void	flush_the_terminal(void)
 {
 	printf("\033[001;1H\033[2J");
 }
-
-/* char	*ft_expander(t_core *core)
-{
-	t_core	*g_core;
-	t_core	*g_core;
-	t_core	*g_core;
-
-	core->expanded = NULL;
-	while (core->env[core->i])
-		if (ft_strncmp(core->env[core->i]), , ft_strlen())
-			//$inputu yazılacak buraya
-			core->expanded = ft_split(core->env[core->i], '=');
-	if (core->expanded != NULL)
-		return (core->expanded[1]);
-	else
-		return (NULL);
-} */
 
 // fix the seg of third
 // mallocların hepsi calloc olacak
@@ -276,15 +232,14 @@ int	main(int argc, char **argv, char **env)
 
 	flush_the_terminal();
 	g_core = malloc(sizeof(t_core));
+	init_list(g_core);
 	init_core(g_core);
-	init_env(env, g_core);
-	init_export(env, g_core);
+	init_temp(env, g_core);
 	(void)argc;
 	(void)argv;
 	g_core->readline = ft_strjoin(g_core->pwd, " > monkeys 🙉🙊🙈 :\033[0;37m ");
 	while (1)
 	{
-		init_lexer(g_core);
 		g_core->input = readline(g_core->readline);
 		add_history(g_core->input);
 		if (g_core->input)

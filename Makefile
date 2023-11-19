@@ -3,29 +3,30 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: sisen <sisen@student.42.fr>                +#+  +:+       +#+         #
+#    By: yokten <yokten@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/11/06 20:04:22 by yokten            #+#    #+#              #
-#    Updated: 2023/11/16 17:12:02 by sisen            ###   ########.fr        #
+#    Updated: 2023/11/18 05:13:43 by yokten           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME	=	minishell
 CC		=	gcc
 INC		=	minishell.
-CFLAGS	=	-Wall -Wextra -Werror #-g -fsanitize=address
+CFLAGS	=	-Wall -Wextra -Werror -g #-g -fsanitize=address
 RM		=	rm -rf
 LIBS += -lreadline
 
 SRCS	=	main.c				\
-			utils.c 			\
 			lexer_list.c		\
 			error_handling.c	\
 			malloc.c			\
 			builtins.c			\
 			builtins2.c			\
+			env_list.c 			\
 			export.c			\
 			expander.c			\
+			builtins3.c 		\
 
 
 OBJS = $(SRCS:.c=.o)

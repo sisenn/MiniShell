@@ -1,37 +1,71 @@
-/* 
 #include "minishell.h"
 
-t_env	*env_listnew(char   *name, char *value)
+t_env	*env_listnew(char *content)
 {
-	t_env	*new;
+	t_env	*node;
 
-	new = (t_env *)malloc(sizeof(t_env));
-	if (!new)
+	node = malloc(sizeof(t_env));
+	if (node == NULL)
 		return (NULL);
-	new->v_name = ft_strdup(name);
-    new->v_value = ft_strdup(value);
-	new->next = NULL;
-	return (new);
-}
-
-t_env	*env_lstlast(t_env *lst)
-{
-	while (lst)
-	{
-		if (!lst->next)
-			return (lst);
-		lst = lst->next;
-	}
-	return (lst);
+	node->content = content;
+	node->next = NULL;
+	return (node);
 }
 
 void	env_lstadd_back(t_env **lst, t_env *new)
 {
-	if (!new || !lst)
-		return ;
-	if (!*lst)
+	t_env	*tmp;
+
+	tmp = *lst;
+	if (!tmp)
+	{
 		*lst = new;
-	else
-		env_lstlast(*lst)->next = new;
+		return ;
+	}
+	while (tmp -> next)
+		tmp = tmp -> next;
+	tmp ->next = new;
 }
- */
+
+t_export	*export_listnew(char *content)
+{
+	t_export	*node;
+
+	node = malloc(sizeof(t_export));
+	if (node == NULL)
+		return (NULL);
+	node->content = content;
+	node->next = NULL;
+	return (node);
+}
+
+void	export_lstadd_back(t_export **lst, t_export *new)
+{
+	t_export	*tmp;
+
+	tmp = *lst;
+	if (!tmp)
+	{
+		*lst = new;
+		return ;
+	}
+	while (tmp -> next)
+		tmp = tmp -> next;
+	tmp ->next = new;
+}
+
+void	add_export (t_core	*core)
+{
+	core->export_head = core->export;
+	core->i = 0;
+	core->export->content = core->tmp[core->i++];
+	while (core->tmp[core->i])
+	{
+		if (core->tmp[core->i + 1])
+			export_lstadd_back(&core->export,
+				export_listnew(ft_strdup(core->tmp[core->i])));
+		if (core->export->next != NULL)
+			core->export = core->export->next;
+		core->i++;
+	}
+}

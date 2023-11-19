@@ -5,16 +5,16 @@ void	ft_unset_management(t_core *core)
 {
 	core->lexer = core->lexer->next;
 	if (core->lexer->content)
-		core->env_joined = ft_strjoin(core->lexer->content, "=");
+		core->tmp_joined = ft_strjoin(core->lexer->content, "=");
 	core->i = -1 ;
-	while (core->env[++core->i])
+	while (core->tmp[++core->i])
 	{
-		if (!ft_strncmp(core->env_joined, core->env[core->i],
-				ft_strlen(core->env_joined)))
+		if (!ft_strncmp(core->tmp_joined, core->tmp[core->i],
+				ft_strlen(core->tmp_joined)))
 		{
-			while (core->env[core->i])
+			while (core->tmp[core->i])
 			{
-				core->env[core->i] = core->env[core->i + 1];
+				core->tmp[core->i] = core->tmp[core->i + 1];
 				core->i++;
 			}
 			return ;
@@ -39,7 +39,7 @@ void	ft_builtins(t_core *core)
 		else if (!ft_strncmp(core->lexer->content, "pwd", 3)
 			&& ft_strlen(core->lexer->content) == 3)
 			ft_pwd_management(core);
-		else if (!ft_strncmp(core->lexer->content, "env", 3)
+  	 	else if (!ft_strncmp(core->lexer->content, "env", 3)
 			&& ft_strlen(core->lexer->content) == 3)
 			ft_env_management(core);
 		else if (!ft_strncmp(core->lexer->content, "cd", 2)
@@ -50,11 +50,11 @@ void	ft_builtins(t_core *core)
 			ft_export_management(core);
 		else if (!ft_strncmp(core->lexer->content, "clear", 5)
 			&& ft_strlen(core->lexer->content) == 5)
-			printf("\e[1;1H\e[2J");
+			flush_the_terminal();
+		else
+			printf("%s: command not found\n", core->lexer->content);
 	}
 }
-
-		// ft_pwd_management(core);    
 
 int	echo_n_control(t_core *core)
 {
@@ -70,7 +70,10 @@ int	echo_n_control(t_core *core)
 
 void	ft_echo_management(t_core *core)
 {
+	core->flag = 1;
 	core->lexer = core->lexer->next;
+	if (!ft_strncmp(core->lexer->content, "-n", 2) && echo_n_control(core))
+		core->flag = 0;
 	while (!ft_strncmp(core->lexer->content, "-n", 2) && echo_n_control(core))
 		core->lexer = core->lexer->next;
 	while (core->lexer)
@@ -86,7 +89,8 @@ void	ft_echo_management(t_core *core)
 			ft_builtins(core);
 		}
 	}
-	printf("\n");
+	if(core->flag == 1)
+		printf("\n");
 }
 
 int	exit_control(t_core *core)

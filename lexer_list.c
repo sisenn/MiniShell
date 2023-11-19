@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   list_add.c                                         :+:      :+:    :+:   */
+/*   lexer_list.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: yokten <yokten@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/06 20:33:30 by yokten            #+#    #+#             */
-/*   Updated: 2023/11/06 20:33:31 by yokten           ###   ########.fr       */
+/*   Updated: 2023/11/18 05:59:29 by yokten           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,33 +14,27 @@
 
 t_lexer	*lexer_listnew(char *content)
 {
-	t_lexer	*new;
+	t_lexer	*node;
 
-	new = (t_lexer *)malloc(sizeof(t_lexer));
-	if (!new)
+	node = malloc(sizeof(t_lexer));
+	if (node == NULL)
 		return (NULL);
-	new->content = content;
-	new->next = NULL;
-	return (new);
-}
-
-t_lexer	*lexer_lstlast(t_lexer *lst)
-{
-	while (lst)
-	{
-		if (!lst->next)
-			return (lst);
-		lst = lst->next;
-	}
-	return (lst);
+	node->content = content;
+	node->next = NULL;
+	return (node);
 }
 
 void	lexer_lstadd_back(t_lexer **lst, t_lexer *new)
 {
-	if (!new || !lst)
-		return ;
-	if (!*lst)
+	t_lexer	*tmp;
+
+	tmp = *lst;
+	if (!tmp)
+	{
 		*lst = new;
-	else
-		lexer_lstlast(*lst)->next = new;
+		return ;
+	}
+	while (tmp -> next)
+		tmp = tmp -> next;
+	tmp ->next = new;
 }

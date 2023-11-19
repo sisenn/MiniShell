@@ -10,13 +10,6 @@ void	ft_pwd_management(t_core	*core)
 	printf("%s\n", core->pwd);
 }
 
-void	ft_env_management(t_core	*core)
-{
-	core->i = 0;
-	while (core->env[core->i])
-		printf("%s\n", core->env[core->i++]);
-}
-
 void	ft_chdir(t_core	*core)
 {
 	core->i = 0;
@@ -37,68 +30,83 @@ void	ft_chdir(t_core	*core)
 	core->readline = ft_strjoin(core->pwd, " > monkeys 🙉🙊🙈 :\033[0;37m ");
 }
 
-void	add_to_export(t_core	*core)
+void	print_export(t_core	*core)
 {
-	core->lexer = core->lexer->next;
+	core->flag = 0;
+	while (0 < --core->i)
+	{
+		while (core->export->next)
+		{
+			if (core->export->content[0] > core->export->next->content[0])
+			{				
+				core->e_tmp = core->export->next->content;
+				core->export->next->content = core->export->content;
+				core->export->content = core->e_tmp;
+			}
+			core->export = core->export->next; 
+		}
+		core->export = core->export_head;
+	}
 	core->i = 0;
-	while (core->export[core->i])
-		core->i++;
-	free (core->export);
-	core->export = malloc(sizeof(char *) * core->i + 2);
+	while(core->export)
+	{
+		printf("declare -x ");
+		while (core->export->content[core->i])
+		{
+			printf("%c", core->export->content[core->i]);
+			if (core->export->content[core->i] == '=')
+			{
+				core->flag = 1;
+				printf("%c", 34);
+			}
+			core->i++;
+			if (core->export->content[core->i] == '\0' && core->flag == 1)
+			{
+				printf("%c", 34);
+				core->flag = 0;
+			}
+		}
+		core->i = 0;
+		core->export = core->export->next;
+		printf("\n");
+	}
 }
 
 void	ft_export_management(t_core	*core)
 {
 	core->i = 0;
 	core->k = 0;
+	core->export = core->export_head;
 	if (core->lexer->next == NULL || core->lexer->next->type != 2)
 	{
-		while (core->export[core->k++]);
-		core->k -= 2;
-		while (0 < core->k)
+		while (core->export)
 		{
-			while (core->i < core->k)
-			{
-				if (core->export[core->i][0] > core->export[core->i + 1][0])
-				{
-					core->swap = core->export[core->i + 1];
-					core->export[core->i + 1] = core->export[core->i];
-					core->export[core->i] = core->swap;
-				}
-				core->i++;
-			}
-			core->k--;
-			core->i = 0;
-		}
-		core->i = 0;
-		core->j = 0;
-		while (core->export[core->i])
-		{
-			printf("declare -x ");
-			while (core->export[core->i][core->j])
-			{
-				printf("%c", core->export[core->i][core->j++]);
-				if (core->export[core->i][core->j - 1] == '=' || core->export[core->i][core->j] == '\0')
-					printf("%c", 34);
-			}
-			printf("\n");
 			core->i++;
-			core->j = 0;
+			core->export = core->export->next;
 		}
+		core->export = core->export_head;
+		print_export(core);
 	}
 	else
-		init_tmp(core);
+		add_export_env(core);
 }
 
-/*	{
-		printf("declare -x ");
-		while (core->env[core->i][core->j])
+void	add_export_env(t_core	*core)
+{
+	core->lexer = core->lexer->next;
+	core->l = 0;
+		export_lstadd_back(&core->export,
+				export_listnew(ft_strdup(core->lexer->content)));
+ 	while (core->lexer->content[core->l])
+	{
+		if (core->lexer->content[core->l] == '=')
 		{
-			printf("%c", core->env[core->i][core->j++]);
-			if (core->env[core->i][core->j - 1] == '=' || core->env[core->i][core->j] == '\0')
-				printf("%c", 34);
+			env_lstadd_back(&core->env,
+				env_listnew(ft_strdup(core->lexer->content)));
+			break;
 		}
-		printf("\n");
-		core->i++;
-		core->j = 0;
-	}*/
+		core->l++;
+	}
+	if (core->lexer->next != NULL && core->lexer->next->type == 2)
+		add_export_env(core);
+}
