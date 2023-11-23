@@ -48,12 +48,40 @@ void	ft_builtins(t_core *core)
 		else if (!ft_strncmp(core->lexer->content, "export", 6)
 			&& ft_strlen(core->lexer->content) == 6)
 			ft_export_management(core);
-		else if (!ft_strncmp(core->lexer->content, "clear", 5)
-			&& ft_strlen(core->lexer->content) == 5)
-			flush_the_terminal();
 		else
-			printf("%s: command not found\n", core->lexer->content);
-	}
+		{
+			core->lexer = core->lexer_head;
+			int tmp = core->child;
+
+							printf("%d\n", core->child);
+				while (core->lexer && core->child > 0)
+				{
+					if (!ft_strncmp(core->lexer->content, "|", 1))
+					{
+						if (core->child == 1)
+						{
+							printf("girdim\n");
+							core->lexer = core->lexer->next;
+							printf("%s\n", core->lexer->content);
+							core->child = --tmp;
+							childforexec(core);
+							break;
+						}
+						else
+						{
+							printf("else girdim\n");
+							core->child--;
+						}
+						printf("%s\n", core->lexer->content);
+
+					}
+					core->lexer = core->lexer->next;
+				}
+			}
+			printf("%s[2]\n", core->lexer->content);
+			ft_exec(core);
+		}
+		//printf("command not found: %s\n", core->lexer->content);
 }
 
 int	echo_n_control(t_core *core)
@@ -71,22 +99,20 @@ int	echo_n_control(t_core *core)
 void	ft_echo_management(t_core *core)
 {
 	core->flag = 1;
-	core->lexer = core->lexer->next;
-	if (!ft_strncmp(core->lexer->content, "-n", 2) && echo_n_control(core))
-		core->flag = 0;
-	while (!ft_strncmp(core->lexer->content, "-n", 2) && echo_n_control(core))
+	if (core->lexer->next != NULL)
+	{	
 		core->lexer = core->lexer->next;
-	while (core->lexer)
-	{
-		if (core->lexer->type == 2)
-		{
-			printf("%s ", core->lexer->content);
+		if (!ft_strncmp(core->lexer->content, "-n", 2) && echo_n_control(core))
+			core->flag = 0;
+		while (!ft_strncmp(core->lexer->content, "-n", 2) && echo_n_control(core))
 			core->lexer = core->lexer->next;
-		}
-		else if (core->lexer->type == 3)
+		while (core->lexer)
 		{
+			if (core->lexer->type == 2)
+				printf("%s ", core->lexer->content);
+			else if (core->lexer->type == 3)
+				ft_builtins(core);
 			core->lexer = core->lexer->next;
-			ft_builtins(core);
 		}
 	}
 	if(core->flag == 1)

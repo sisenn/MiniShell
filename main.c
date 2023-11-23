@@ -6,12 +6,11 @@
 /*   By: yokten <yokten@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/06 20:08:49 by yokten            #+#    #+#             */
-/*   Updated: 2023/11/18 15:14:04 by yokten           ###   ########.fr       */
+/*   Updated: 2023/11/21 23:03:33 by yokten           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-#include <string.h>
 
 void	init_list(t_core *g_core)
 {
@@ -143,6 +142,7 @@ void	leximus(t_core *core)
 			core->i++;
 		if (core->input[core->i] == '|')
 		{
+			core->child++;
 			core->lexer->type = 3;
 			core->flag = 1;
 			core->lexer->content = malloc(sizeof(char) * 2);
@@ -229,7 +229,6 @@ void	flush_the_terminal(void)
 int	main(int argc, char **argv, char **env)
 {
 	t_core	*g_core;
-
 	flush_the_terminal();
 	g_core = malloc(sizeof(t_core));
 	init_list(g_core);
@@ -241,7 +240,8 @@ int	main(int argc, char **argv, char **env)
 	while (1)
 	{
 		g_core->input = readline(g_core->readline);
-		add_history(g_core->input);
+		if (g_core->input != NULL)
+			add_history(g_core->input);
 		if (g_core->input)
 		{
 			if (!control_quote(g_core))
