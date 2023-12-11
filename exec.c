@@ -3,78 +3,120 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yokten <yokten@student.42.fr>              +#+  +:+       +#+        */
+/*   By: ckarakus <ckarakus@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/11/21 15:41:40 by yokten            #+#    #+#             */
-/*   Updated: 2023/11/21 23:02:23 by yokten           ###   ########.fr       */
+/*   Created: 2023/12/09 21:25:17 by ckarakus          #+#    #+#             */
+/*   Updated: 2023/12/11 05:44:49 by ckarakus         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void childforexec(t_core *core)
+void	ft_exec(t_main	*main)
 {
-	core->pid[core->s] = fork();
-	if (core->pid[core->s] == -1)
-		perror("Wrong pid!");
-	else if (core->pid[core->s++] == 0)
-		ft_builtins(core);
-	waitpid(core->pid[core->s], NULL, 0);
+	pipe(main->io);
+	if (main->lexer_list->content[0] != '\0')
+	{
+		main->pid2 = fork();
+		if (main->pid2 < 0)
+		{
+			printf("fork error\n");
+			exit(1);
+		}
+		if (main->pid2 == 0)
+			child_process(main);
+		if (main->process_iterator != 0)
+			close(main->exec_fd);
+		close(main->io[1]);
+		main->exec_fd = main->io[0];
+		main->process_iterator++;
+	}
 }
 
-void	ft_exec(t_core	*core)
+void	ft_access(t_main *main)
 {
-	char **res;
-	char *slash_content;
-	core->i = -1;
-	char **arg = malloc(sizeof(char *) * 100);
-	char **env2 = malloc(sizeof(char *) * 100);
-	core->env = core->env_head;
+	main->z = -1;
+	main->env2 = malloc(sizeof(char *) * 100);
+	parse_path(main);
+	main->z = count_args(main);
+	main->arg = malloc(sizeof(char *) * (main->z + 1));
+	create_arg(main);
+	main->env_list = main->env_head;
+	main->z = 0;
+	while (main->env_list)
+	{
+		main->env2[main->z++] = main->env_list->content;
+		main->env_list = main->env_list->next;
+	}
+}
 
-	while (core->env)
-	{
-		
-		if (!ft_strncmp(core->env->content,"PATH=", 5))
-			break;
-		core->env = core->env->next;
-	}
-		//printf("girdim\n");
-	res = ft_split(&core->env->content[5], ':');
-	slash_content = ft_strjoin("/",core->lexer->content);
+int	count_args(t_main *main)
+{
+	int	i;
 
-	while(res[++core->i])
-		res[core->i] = ft_strjoin(res[core->i], slash_content);
-	core->j = -1;
-	while (res[++core->j])
+	i = 1;
+	main->lexer_tmp = main->lexer_list;
+	while (main->lexer_list->next && (main->lexer_list->next->type == ARGUMENT
+			|| main->lexer_list->next->type == REDIRECTION))
 	{
-		if (!access(res[core->j], F_OK))
-			break;
+		i++;
+		main->lexer_list = main->lexer_list->next;
 	}
-	//printf("%s\n", res[core->j]);
-	arg[0] = core->lexer->content;
-	core->i = 1;
-	while (core->lexer->next && core->lexer->next->type == 2)
+	main->lexer_list = main->lexer_tmp;
+	return (i);
+}
+
+void	parse_path(t_main *main)
+{
+	char	*slash_content;
+
+	main->env_list = main->env_head;
+	while (main->env_list)
 	{
-		core->lexer = core->lexer->next;
-		arg[core->i] = core->lexer->content;
-		core->i++;
+		if (!ft_strncmp(main->env_list->content, "PATH=", 5))
+			break ;
+		main->env_list = main->env_list->next;
 	}
-	//printf("%s\n", res[core->j]);
-	arg[core->i] = NULL;
-	core->env = core->env_head;
-	core->i = 0;
-	while (core->env)
+	if (main->lexer_list->content[0] != '/')
 	{
-		env2[core->i++] = core->env->content;
-		core->env =core->env->next;
+		main->res = ft_split(&main->env_list->content[5], ':');
+		slash_content = ft_strjoin("/", main->lexer_list->content);
+		while (main->res[++main->z])
+			main->res[main->z] = ft_strjoin(main->res[main->z], slash_content);
 	}
-	if (core->lexer->next && core->lexer->next->type == 3)
-			childforpipe(core, 1);
 	else
+		main->res = ft_split(main->lexer_list->content, '\0');
+	main->k = -1;
+	while (main->res[++main->k])
 	{
-		printf("girekbari\n");
-		childforpipe(core, 3);
+		if (!access(main->res[main->k], F_OK))
+			break ;
 	}
-	execve(res[core->j], arg, env2);
-	printf("%s : command not found\n", core->lexer->content);
+	if (main->res[main->k] == NULL)
+	{
+		printf("command not found: %s\n", main->lexer_list->content);
+		exit(127);
+	}
+}
+
+void	create_arg(t_main *main)
+{
+	main->arg[0] = main->lexer_list->content;
+	main->z = 1;
+	while (main->lexer_list->next && (main->lexer_list->next->type == ARGUMENT
+			|| main->lexer_list->next->type == REDIRECTION))
+	{
+		main->lexer_list = main->lexer_list->next;
+		if (main->lexer_list->type == ARGUMENT)
+		{
+			main->arg[main->z] = main->lexer_list->content;
+			main->z++;
+		}
+		if (main->lexer_list->type == REDIRECTION)
+		{
+			ft_redirections(main);
+			break ;
+		}
+	}
+	main->arg[main->z] = NULL;
 }

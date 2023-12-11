@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   structs.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yokten <yokten@student.42.fr>              +#+  +:+       +#+        */
+/*   By: ckarakus <ckarakus@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/11/06 20:04:30 by yokten            #+#    #+#             */
-/*   Updated: 2023/11/21 23:01:35 by yokten           ###   ########.fr       */
+/*   Created: 2023/12/03 04:27:52 by ckarakus          #+#    #+#             */
+/*   Updated: 2023/12/10 23:47:23 by ckarakus         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,43 +30,55 @@ typedef struct s_export
 {
 	char			*content;
 	struct s_export	*next;
-}	t_export;
+}	t_exp;
 
-typedef struct s_core
+typedef struct s_main
 {
-	char			*input;
-	t_lexer			*lexer;
-	t_lexer			*lexer_head;
-	t_env			*env;
-	t_env			*env_head;
-	t_export		*export;
-	t_export		*export_head;
-	pid_t			*pid;
-	char			**expanded;
-	int				i;
-	int				j;
-	int				k;
-	int				l;
-	int				t;
-	int				p;
-	int				s;
-	int 			z;
-	int				**pipes;
-	int				lex_flag;
-	int				control34;
-	int				control39;
-	int				exp_env_size;
-	int				flag;
-	int				child;
-	int				err_code;
-	char			*tmp_joined;
-	char			*pwd;
-	char			*readline;
-	char			**tmp;
-	char			*e_tmp;
-	char			**exp_env;
-	char			*swap;
-	char			*expander;
-}	t_core;
+	char	*input;
+	char	*shell_name;
+	t_lexer	*lexer_list;
+	t_lexer	*lexer_head;
+	t_lexer	*lexer_tmp;
+	t_env	*env_head;
+	t_env	*env_list;
+	t_exp	*export_list;
+	t_exp	*export_head;
+	int		i;
+	int		j;
+	int		a;
+	int		b;
+	int		c;
+	int		l;
+	int		k;
+	int		z;
+	int		x;
+	int		y;
+	int		q;
+	int		redir_count;
+	int		dollar;
+	int		pipe_count;
+	int		parse_flag;
+	int		single_q;
+	int		double_q;
+	char	*temp_string;
+	char	*tmp;
+	char	*dq_temp;
+	int		flag;
+	char	*pwd;
+	char	*export_tmp;
+	char	**temp_env;
+	int		process_iterator;
+	int		exec_fd;
+	char	**arg;
+	char	**env2;
+	char	**res;
+	char	*tmp_joined;
+	int		io[2];
+	int		heredoc_fd[2];
+	int		*pid;
+	int		heredoc_flag;
+	int		err_no;
+	pid_t	pid2;
+}	t_main;
 
 #endif

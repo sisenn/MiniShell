@@ -1,112 +1,98 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   builtins2.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ckarakus <ckarakus@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/12/09 18:11:52 by ckarakus          #+#    #+#             */
+/*   Updated: 2023/12/10 15:24:53 by ckarakus         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
-#include "./minishell.h"
+#include "minishell.h"
 
-void	ft_pwd_management(t_core	*core)
+void	ft_pwd(t_main *main)
 {
 	char	*str;
 
 	str = NULL;
-	core->pwd = getcwd(str, 0);
-	printf("%s\n", core->pwd);
+	if (main->pwd != NULL)
+		free(main->pwd);
+	main->pwd = getcwd(str, 0);
+	printf("%s\n", main->pwd);
 }
 
-void	ft_chdir(t_core	*core)
+void	ft_env(t_main *main)
 {
-	core->i = 0;
-	core->pwd = ft_strjoin("\033[0;35m", getcwd(core->pwd, 0));
-
-	if (core->lexer->next)
-		core->lexer = core->lexer->next;
-	if (core->lexer && core->lexer->type == 2)
-		core->i = chdir(core->lexer->content);
-	else if (!core->lexer->next)
-		core->i = chdir("/Users/sisen"/*yokten*/);
-	else if (core->lexer->next && core->lexer->next->type == 2)
-		printf("cd: too many arguments\n");
-	if (core->i < 0)
-		printf("cd: no such file or directory: %s\n"
-			, core->lexer->content);
-	core->pwd = ft_strjoin("\033[0;35m", getcwd(core->pwd, 0));
-	core->readline = ft_strjoin(core->pwd, " > monkeys 🙉🙊🙈 :\033[0;37m ");
-}
-
-void	print_export(t_core	*core)
-{
-	core->flag = 0;
-	while (0 < --core->i)
+	main->i = 0;
+	main->env_list = main->env_head;
+	while (main->env_list)
 	{
-		while (core->export->next)
-		{
-			if (core->export->content[0] > core->export->next->content[0])
-			{				
-				core->e_tmp = core->export->next->content;
-				core->export->next->content = core->export->content;
-				core->export->content = core->e_tmp;
-			}
-			core->export = core->export->next; 
-		}
-		core->export = core->export_head;
+		printf("%s\n", main->env_list->content);
+		main->env_list = main->env_list->next;
 	}
-	core->i = 0;
-	while(core->export)
-	{
-		printf("declare -x ");
-		while (core->export->content[core->i])
-		{
-			printf("%c", core->export->content[core->i]);
-			if (core->export->content[core->i] == '=')
-			{
-				core->flag = 1;
-				printf("%c", 34);
-			}
-			core->i++;
-			if (core->export->content[core->i] == '\0' && core->flag == 1)
-			{
-				printf("%c", 34);
-				core->flag = 0;
-			}
-		}
-		core->i = 0;
-		core->export = core->export->next;
-		printf("\n");
-	}
+	main->env_list = main->env_head;
 }
 
-void	ft_export_management(t_core	*core)
+void	ft_export(t_main	*main)
 {
-	core->i = 0;
-	core->k = 0;
-	core->export = core->export_head;
-	if (core->lexer->next == NULL || core->lexer->next->type != 2)
+	main->i = 0;
+	main->export_list = main->export_head;
+	if (main->lexer_list->next == NULL || main->lexer_list->next->type != 2)
 	{
-		while (core->export)
+		while (main->export_list)
 		{
-			core->i++;
-			core->export = core->export->next;
+			main->i++;
+			main->export_list = main->export_list->next;
 		}
-		core->export = core->export_head;
-		print_export(core);
+		main->export_list = main->export_head;
+		print_export(main);
 	}
 	else
-		add_export_env(core);
+		add_export_env(main);
 }
 
-void	add_export_env(t_core	*core)
+void	print_export(t_main	*main)
 {
-	core->lexer = core->lexer->next;
-	core->l = 0;
-		export_lstadd_back(&core->export,
-				export_listnew(ft_strdup(core->lexer->content)));
- 	while (core->lexer->content[core->l])
+	main->flag = 0;
+	while (0 < --main->i)
 	{
-		if (core->lexer->content[core->l] == '=')
+		while (main->export_list->next)
 		{
-			env_lstadd_back(&core->env,
-				env_listnew(ft_strdup(core->lexer->content)));
-			break;
+			if (main->export_list->content[0] > \
+			main->export_list->next->content[0])
+			{
+				main->export_tmp = main->export_list->next->content;
+				main->export_list->next->content = main->export_list->content;
+				main->export_list->content = main->export_tmp;
+			}
+			main->export_list = main->export_list->next;
 		}
-		core->l++;
+		main->export_list = main->export_head;
 	}
-	if (core->lexer->next != NULL && core->lexer->next->type == 2)
-		add_export_env(core);
+	main->i = 0;
+	while (main->export_list)
+		declare_export(main);
+}
+
+void	add_export_env(t_main	*main)
+{
+	main->lexer_list = main->lexer_list->next;
+	main->l = 0;
+	export_lstadd_back(&main->export_list,
+		export_listnew(ft_strdup(main->lexer_list->content)));
+	while (main->lexer_list->content[main->l])
+	{
+		if (main->lexer_list->content[main->l] == '=')
+		{
+			env_lstadd_back(&main->env_list,
+				env_listnew(ft_strdup(main->lexer_list->content)));
+			break ;
+		}
+		main->l++;
+	}
+	if (main->lexer_list->next != NULL \
+	&& main->lexer_list->next->type == ARGUMENT)
+		add_export_env(main);
 }

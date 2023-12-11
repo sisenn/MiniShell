@@ -3,65 +3,80 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: yokten <yokten@student.42.fr>              +#+  +:+       +#+         #
+#    By: ckarakus <ckarakus@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/11/06 20:04:22 by yokten            #+#    #+#              #
-#    Updated: 2023/11/21 17:14:28 by yokten           ###   ########.fr        #
+#    Updated: 2023/12/11 07:03:53 by ckarakus         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME	=	minishell
 CC		=	gcc
 INC		=	minishell.
-CFLAGS	=	-Wall -Wextra -Werror -g #-g -fsanitize=address
 RM		=	rm -rf
 LIBS += -lreadline
+RL_FLAGS= -lft -L $(LIBFT) $(LIBS) -L ./lib/readline/lib
+RL_INCS = --I. -I ./lib/readline/include
+
 
 SRCS	=	main.c				\
-			lexer_list.c		\
-			error_handling.c	\
-			malloc.c			\
-			builtins.c			\
+			util.c				\
+			parser.c			\
+			parser2.c			\
+			list_util.c			\
+			list_util2.c		\
+			util2.c				\
+			builtins.c 			\
 			builtins2.c			\
-			env_list.c 			\
-			export.c			\
-			expander.c			\
 			builtins3.c 		\
 			exec.c 				\
-			pipe.c				\
+			list_util3.c		\
+			exec2.c				\
+			redirections.c		\
+			builtins4.c			\
+			signals.c			\
+			error_handler.c		\
+			heredoc.c 			\
 
+CC = @gcc
+NAME = minishell
+CFLAGS = -Wall -Wextra -Werror -g
+RM = @rm -rf
+LIBFT = libft/libft.a
 OBJS = $(SRCS:.c=.o)
 
-LIBFT = libft/libft.a
-Y = "\033[33m"
-R = "\033[31m"
-G = "\033[32m"
-B = "\033[34m"
+READLINE = readline
 
-all: $(NAME)
+all: $(READLINE) $(NAME)
 
-$(NAME): $(OBJS) $(LIBFT)
-	@$(CC) $(CFLAGS) $(LIBFT) $(OBJS) $(LIBS) -o $(NAME) -lreadline
-	@echo $(G)"[✓] "$(B)"minishell"
+$(READLINE):
+	curl -O https://ftp.gnu.org/gnu/readline/readline-8.2.tar.gz
+	tar -xvf readline-8.2.tar.gz
+	cd readline-8.2 && ./configure --prefix=${PWD}/readline
+	cd readline-8.2 && make install
 
-$(LIBFT) : 
+
+$(NAME): $(OBJS)  $(LIBFT)
+	$(CC) -o $(NAME) $(OBJS)  $(LIBFT) $(CFLAGS) -L${PWD}/readline/lib  -I${PWD}/readline/include/ -lreadline
+
+%.o: %.c
+	$(CC) $(CFLAGS) -c $< -o $@ -I${PWD}/readline/include/
+  $(LIBFT) : 
 	@make -C libft
-
-%.o: %.c $(INC)
-	@$(CC) -c $< -o $@ $(CFLAGS)
-
-clean:
-	@$(RM) $(OBJS)
-
 fclean: clean
-	@$(RM) $(NAME)
+	$(RM) $(NAME)
 	@make fclean -C libft
+	@rm -rf readline-8.2 readline-8.2.tar.gz
 
-re:	fclean all
-
-git: 
+git:
+	@make fclean
 	git add .
 	git commit -m "auto commit"
 	git push
 
-.PHONY: all, clean, fclean, re
+clean:
+	$(RM) $(OBJS)
+
+re: fclean all
+
+.PHONY: all fclean clean re
