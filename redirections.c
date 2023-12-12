@@ -93,6 +93,5 @@ void	heredoc(t_main	*main)
 	if (pipe(main->heredoc_fd) == -1)
 		perror("heredoc err");
 	g_signal = 2;
-	while (1)
-		start_heredoc(main);
+	start_heredoc(main);
 }

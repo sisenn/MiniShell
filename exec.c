@@ -77,7 +77,7 @@ void	parse_path(t_main *main)
 			break ;
 		main->env_list = main->env_list->next;
 	}
-	if (main->lexer_list->content[0] != '/')
+	if (main->lexer_list->content[0] != '/' && ft_strncmp(main->lexer_list->content, "./", 2))
 	{
 		main->res = ft_split(&main->env_list->content[5], ':');
 		slash_content = ft_strjoin("/", main->lexer_list->content);
@@ -94,7 +94,8 @@ void	parse_path(t_main *main)
 	}
 	if (main->res[main->k] == NULL)
 	{
-		printf("command not found: %s\n", main->lexer_list->content);
+		if (ft_strcmp(main->lexer_list->content, "exit"))
+			printf("command not found: %s\n", main->lexer_list->content);
 		exit(127);
 	}
 }

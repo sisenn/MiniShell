@@ -27,12 +27,17 @@ void	ft_env(t_main *main)
 {
 	main->i = 0;
 	main->env_list = main->env_head;
-	while (main->env_list)
+	if (main->lexer_list->next && main->lexer_list->next->type == ARGUMENT)
+		printf("env: %s: No such file or directory\n", main->lexer_list->next->content);
+	else
 	{
-		printf("%s\n", main->env_list->content);
-		main->env_list = main->env_list->next;
+		while (main->env_list)
+		{
+			printf("%s\n", main->env_list->content);
+			main->env_list = main->env_list->next;
+		}
+		main->env_list = main->env_head;
 	}
-	main->env_list = main->env_head;
 }
 
 void	ft_export(t_main	*main)

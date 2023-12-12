@@ -16,23 +16,26 @@ void	start_heredoc(t_main	*main)
 {
 	char	*input;
 
-	input = readline("> ");
-	if (main->lexer_list->next->next && (
-			main->lexer_list->next->next->type == REDIRECTION))
-		start_heredoc2(main, input);
-	if (!input || (!ft_strncmp(input, main->lexer_list->next->content,
-				ft_strlen(main->lexer_list->next->content))
-			&& ft_strlen(input) == \
-			ft_strlen(main->lexer_list->next->content)))
+	while (1)
 	{
-		free(input);
-		return ;
-	}
-	else
-	{
-		write(main->heredoc_fd[1], input, ft_strlen(input));
-		write(main->heredoc_fd[1], "\n", 1);
-		free(input);
+		input = readline("> ");
+		if (main->lexer_list->next->next && (
+				main->lexer_list->next->next->type == REDIRECTION))
+		{
+			start_heredoc2(main, input);
+			break;
+		}
+		if (!input || !ft_strcmp(input, main->lexer_list->next->content))
+		{
+			free(input);
+			return ;
+		}
+		else
+		{
+			write(main->heredoc_fd[1], input, ft_strlen(input));
+			write(main->heredoc_fd[1], "\n", 1);
+			free(input);
+		}
 	}
 }
 

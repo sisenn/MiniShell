@@ -62,7 +62,7 @@ void	add_env(t_main	*main)
 	main->env_list->content = main->temp_env[main->c++];
 	while (main->temp_env[main->c])
 	{
-		if (main->temp_env[main->c + 1])
+		if (&main->temp_env[main->c + 1])
 			env_lstadd_back(&main->env_list,
 				env_listnew(ft_strdup(main->temp_env[main->c])));
 		if (main->env_list->next != NULL)

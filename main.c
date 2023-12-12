@@ -117,8 +117,5 @@ int	main(int argc, char **argv, char **env)
 }
 
 /*#tab ls'i çalıştırıyor,
-exit | exit command not found exit döndürüyor,
- heredocta ctrl + \ düzgün çalışmıyor, 
- grep a'da ctrl d 2. seferde çıkıyor tek seferde çıkmıyor, 
-env'lerde son elemanı almıyor listeye,
-env + argüman command not found döndürmeli*/
+ ?? heredocta ctrl + \ düzgün çalışmıyor, 
+ */
