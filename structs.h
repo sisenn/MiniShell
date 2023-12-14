@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   structs.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ckarakus <ckarakus@student.42.fr>          +#+  +:+       +#+        */
+/*   By: sisen <sisen@student.42istanbul.com.tr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/12/03 04:27:52 by ckarakus          #+#    #+#             */
-/*   Updated: 2023/12/10 23:47:23 by ckarakus         ###   ########.fr       */
+/*   Created: 2023/12/14 17:04:30 by sisen             #+#    #+#             */
+/*   Updated: 2023/12/14 17:04:31 by sisen            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,7 @@ typedef struct s_main
 	int		x;
 	int		y;
 	int		q;
+	int		r;
 	int		redir_count;
 	int		dollar;
 	int		pipe_count;

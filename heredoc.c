@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ckarakus <ckarakus@student.42.fr>          +#+  +:+       +#+        */
+/*   By: sisen <sisen@student.42istanbul.com.tr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/12/11 06:08:08 by ckarakus          #+#    #+#             */
-/*   Updated: 2023/12/11 06:29:06 by ckarakus         ###   ########.fr       */
+/*   Created: 2023/12/14 17:02:33 by sisen             #+#    #+#             */
+/*   Updated: 2023/12/14 17:02:34 by sisen            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ void	start_heredoc(t_main	*main)
 				main->lexer_list->next->next->type == REDIRECTION))
 		{
 			start_heredoc2(main, input);
-			break;
+			break ;
 		}
 		if (!input || !ft_strcmp(input, main->lexer_list->next->content))
 		{

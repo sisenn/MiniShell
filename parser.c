@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ckarakus <ckarakus@student.42.fr>          +#+  +:+       +#+        */
+/*   By: sisen <sisen@student.42istanbul.com.tr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/12/04 23:36:11 by ckarakus          #+#    #+#             */
-/*   Updated: 2023/12/11 06:16:28 by ckarakus         ###   ########.fr       */
+/*   Created: 2023/12/14 17:04:01 by sisen             #+#    #+#             */
+/*   Updated: 2023/12/14 17:04:02 by sisen            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,11 +27,6 @@ void	redir_manage(t_main *main)
 	main->lexer_list->type = REDIRECTION;
 	if (!ft_strncmp(&main->input[main->i], ">>", 2))
 	{
-		if (main->input[main->i + 2] == '>' || main->input[main->i + 2] == '<')
-		{
-			main->err_no = 258;
-			printf("monkeyshell: syntax error near unexpected token\n");
-		}
 		main->lexer_list->content = ft_strdup(">>");
 		main->i += 2;
 	}

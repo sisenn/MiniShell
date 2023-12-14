@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtins2.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ckarakus <ckarakus@student.42.fr>          +#+  +:+       +#+        */
+/*   By: sisen <sisen@student.42istanbul.com.tr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/12/09 18:11:52 by ckarakus          #+#    #+#             */
-/*   Updated: 2023/12/10 15:24:53 by ckarakus         ###   ########.fr       */
+/*   Created: 2023/12/14 17:01:54 by sisen             #+#    #+#             */
+/*   Updated: 2023/12/14 17:01:56 by sisen            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,8 @@ void	ft_env(t_main *main)
 	main->i = 0;
 	main->env_list = main->env_head;
 	if (main->lexer_list->next && main->lexer_list->next->type == ARGUMENT)
-		printf("env: %s: No such file or directory\n", main->lexer_list->next->content);
+		printf("env: %s: No such file or directory\n", \
+		main->lexer_list->next->content);
 	else
 	{
 		while (main->env_list)
@@ -79,25 +80,4 @@ void	print_export(t_main	*main)
 	main->i = 0;
 	while (main->export_list)
 		declare_export(main);
-}
-
-void	add_export_env(t_main	*main)
-{
-	main->lexer_list = main->lexer_list->next;
-	main->l = 0;
-	export_lstadd_back(&main->export_list,
-		export_listnew(ft_strdup(main->lexer_list->content)));
-	while (main->lexer_list->content[main->l])
-	{
-		if (main->lexer_list->content[main->l] == '=')
-		{
-			env_lstadd_back(&main->env_list,
-				env_listnew(ft_strdup(main->lexer_list->content)));
-			break ;
-		}
-		main->l++;
-	}
-	if (main->lexer_list->next != NULL \
-	&& main->lexer_list->next->type == ARGUMENT)
-		add_export_env(main);
 }

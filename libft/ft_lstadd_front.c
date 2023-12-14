@@ -3,17 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   ft_lstadd_front.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yokten <yokten@student.42.fr>              +#+  +:+       +#+        */
+/*   By: ckarakus <ckarakus@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/12/28 11:38:07 by yokten            #+#    #+#             */
-/*   Updated: 2022/12/28 11:47:13 by yokten           ###   ########.fr       */
+/*   Created: 2022/12/20 16:41:56 by ckarakus          #+#    #+#             */
+/*   Updated: 2022/12/20 17:25:51 by ckarakus         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-void	ft_lstadd_front(t_list	**lst, t_list *new)
+void	ft_lstadd_front(t_list **lst, t_list *new)
 {
-	new->next = *lst;
+	new -> next = *lst;
 	*lst = new;
 }

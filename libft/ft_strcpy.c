@@ -1,27 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strtrim.c                                       :+:      :+:    :+:   */
+/*   ft_strcpy.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ckarakus <ckarakus@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/12/13 03:27:53 by ckarakus          #+#    #+#             */
-/*   Updated: 2022/12/13 14:46:53 by ckarakus         ###   ########.fr       */
+/*   Created: 2022/12/12 19:22:52 by ckarakus          #+#    #+#             */
+/*   Updated: 2022/12/18 13:10:32 by ckarakus         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-char	*ft_strtrim(char const *s1, char const *set)
+char	*ft_strcpy(char *dst, const char *src)
 {
-	size_t	len;
+	char	*dest;
 
-	if (!s1 || !set)
-		return (NULL);
-	while (*s1 && ft_strchr(set, *s1))
-		s1++;
-	len = ft_strlen(s1);
-	while (len && ft_strchr(set, s1[len]))
-		len--;
-	return (ft_substr(s1, 0, len + 1));
+	dest = dst;
+	while (*src)
+		*dst++ = *src++;
+	*dst = '\0';
+	return (dest);
 }

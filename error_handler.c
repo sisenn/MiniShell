@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   error_handler.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ckarakus <ckarakus@student.42.fr>          +#+  +:+       +#+        */
+/*   By: sisen <sisen@student.42istanbul.com.tr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/12/10 23:12:14 by ckarakus          #+#    #+#             */
-/*   Updated: 2023/12/11 06:15:19 by ckarakus         ###   ########.fr       */
+/*   Created: 2023/12/14 17:02:12 by sisen             #+#    #+#             */
+/*   Updated: 2023/12/14 17:02:14 by sisen            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,4 +36,17 @@ void	start_shell2(t_main	*main, int status)
 	free_main(main);
 	main->pipe_count = 0;
 	main->redir_count = 0;
+}
+
+int	err_syntax(t_main *main)
+{
+	main->err_no = 258;
+	printf("monkeshell: syntax error near unexpected token\n");
+	return (0);
+}
+
+void	err_unexpected(void)
+{
+	printf("monkeshell: syntax error near unexpected token `newline'\n");
+	exit(1);
 }

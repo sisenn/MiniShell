@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ckarakus <ckarakus@student.42.fr>          +#+  +:+       +#+        */
+/*   By: sisen <sisen@student.42istanbul.com.tr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/12/03 02:19:48 by ckarakus          #+#    #+#             */
-/*   Updated: 2023/12/11 06:29:28 by ckarakus         ###   ########.fr       */
+/*   Created: 2023/12/14 17:03:55 by sisen             #+#    #+#             */
+/*   Updated: 2023/12/14 17:03:56 by sisen            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,4 +105,16 @@ void	start_heredoc(t_main	*main);
 void	free_main(t_main *main);
 void	start_heredoc2(t_main	*main, char *input);
 int		exit_numeric_control(char *str);
+void	ft_change_dir(t_main *main);
+void	replace_or_add_env(t_env **list, char *content);
+void	replace_or_add_exp(t_exp **list, char *content);
+void	add_export_env(t_main *main);
+void	parse_path2(t_main *main, char *slash_content);
+void	parse_path3(t_main *main);
+void	replace_or_add_env(t_env **list, char *content);
+void	replace_or_add_exp(t_exp **list, char *content);
+int		err_syntax(t_main *main);
+void	dollar_manage3(t_main *main, char *string);
+void	err_unexpected(void);
+
 #endif

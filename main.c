@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ckarakus <ckarakus@student.42.fr>          +#+  +:+       +#+        */
+/*   By: sisen <sisen@student.42istanbul.com.tr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/12/03 02:24:27 by ckarakus          #+#    #+#             */
-/*   Updated: 2023/12/11 06:23:38 by ckarakus         ###   ########.fr       */
+/*   Created: 2023/12/14 17:03:43 by sisen             #+#    #+#             */
+/*   Updated: 2023/12/14 17:03:45 by sisen            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,20 +45,17 @@ int	error_control(t_main *main)
 	i = 0;
 	if (!check_quotes(main))
 		return (0);
-	if (main->input[0] == ';' || main->input[0] == '|' || main->input[0] == '>'
-		|| main->input[0] == '<')
-	{
-		main->err_no = 258;
-		printf("monkeshell: syntax error near unexpected token\n");
-		return (0);
-	}
+	if (ft_strchr(";?<>&|", main->input[0]) && main->input[0] != '\0')
+		err_syntax(main);
 	while (main->input[i] != '\0')
 	{
 		if (main->input[i] == '|' && main->input[i + 1] == '|')
+			err_syntax(main);
+		if (!ft_strncmp(&main->input[i], "<<", 2) \
+		|| !ft_strncmp(&main->input[i], ">>", 2))
 		{
-			main->err_no = 258;
-			printf("monkeshell: syntax error near unexpected token\n");
-			return (0);
+			if (main->input[i + 2] == '<' || main->input[i + 2] == '>')
+				err_syntax(main);
 		}
 		i++;
 	}
@@ -88,11 +85,6 @@ void	start_shell(t_main *main)
 			exit(1);
 		if (!error_control(main))
 			free_main(main);
-		/*else if (!ft_strncmp(main->input, "$?", 2))
-		{
-			error_code(main);
-			main->err_no = 0;
-		}*/
 		else
 			start_shell2(main, status);
 	}
@@ -115,7 +107,3 @@ int	main(int argc, char **argv, char **env)
 	start_shell(main);
 	return (0);
 }
-
-/*#tab ls'i çalıştırıyor,
- ?? heredocta ctrl + \ düzgün çalışmıyor, 
- */

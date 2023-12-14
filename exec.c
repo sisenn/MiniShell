@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ckarakus <ckarakus@student.42.fr>          +#+  +:+       +#+        */
+/*   By: sisen <sisen@student.42istanbul.com.tr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/12/09 21:25:17 by ckarakus          #+#    #+#             */
-/*   Updated: 2023/12/11 05:44:49 by ckarakus         ###   ########.fr       */
+/*   Created: 2023/12/14 17:02:19 by sisen             #+#    #+#             */
+/*   Updated: 2023/12/14 17:02:20 by sisen            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,19 +71,16 @@ void	parse_path(t_main *main)
 	char	*slash_content;
 
 	main->env_list = main->env_head;
+	slash_content = NULL;
 	while (main->env_list)
 	{
 		if (!ft_strncmp(main->env_list->content, "PATH=", 5))
 			break ;
 		main->env_list = main->env_list->next;
 	}
-	if (main->lexer_list->content[0] != '/' && ft_strncmp(main->lexer_list->content, "./", 2))
-	{
-		main->res = ft_split(&main->env_list->content[5], ':');
-		slash_content = ft_strjoin("/", main->lexer_list->content);
-		while (main->res[++main->z])
-			main->res[main->z] = ft_strjoin(main->res[main->z], slash_content);
-	}
+	if (main->lexer_list->content[0] != '/' \
+	&& ft_strncmp(main->lexer_list->content, "./", 2))
+		parse_path2(main, slash_content);
 	else
 		main->res = ft_split(main->lexer_list->content, '\0');
 	main->k = -1;
@@ -93,11 +90,7 @@ void	parse_path(t_main *main)
 			break ;
 	}
 	if (main->res[main->k] == NULL)
-	{
-		if (ft_strcmp(main->lexer_list->content, "exit"))
-			printf("command not found: %s\n", main->lexer_list->content);
-		exit(127);
-	}
+		parse_path3(main);
 }
 
 void	create_arg(t_main *main)

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   signals.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ckarakus <ckarakus@student.42.fr>          +#+  +:+       +#+        */
+/*   By: sisen <sisen@student.42istanbul.com.tr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/12/11 05:57:57 by ckarakus          #+#    #+#             */
-/*   Updated: 2023/12/11 07:03:39 by ckarakus         ###   ########.fr       */
+/*   Created: 2023/12/14 17:04:25 by sisen             #+#    #+#             */
+/*   Updated: 2023/12/14 17:18:36 by sisen            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,6 @@ void	signal_handler(int sig)
 	if (sig == SIGINT && g_signal == 2)
 	{
 		rl_redisplay();
-
 		g_signal = 1;
 	}
 	else if (sig == SIGINT)

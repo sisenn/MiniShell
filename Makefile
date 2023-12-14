@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: ckarakus <ckarakus@student.42.fr>          +#+  +:+       +#+         #
+#    By: sisen <sisen@student.42istanbul.com.tr>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2023/11/06 20:04:22 by yokten            #+#    #+#              #
-#    Updated: 2023/12/11 07:03:53 by ckarakus         ###   ########.fr        #
+#    Created: 2023/12/14 17:03:49 by sisen             #+#    #+#              #
+#    Updated: 2023/12/14 17:03:50 by sisen            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -37,6 +37,7 @@ SRCS	=	main.c				\
 			signals.c			\
 			error_handler.c		\
 			heredoc.c 			\
+			parser3.c			\
 
 CC = @gcc
 NAME = minishell

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   list_util3.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ckarakus <ckarakus@student.42.fr>          +#+  +:+       +#+        */
+/*   By: sisen <sisen@student.42istanbul.com.tr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/12/10 12:09:31 by ckarakus          #+#    #+#             */
-/*   Updated: 2023/12/10 12:37:29 by ckarakus         ###   ########.fr       */
+/*   Created: 2023/12/14 17:03:37 by sisen             #+#    #+#             */
+/*   Updated: 2023/12/14 17:03:38 by sisen            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,4 +58,53 @@ void	delete_node_t_env(t_env **env, char *content)
 		prev = node;
 		node = node->next;
 	}
+}
+
+void	replace_or_add_env(t_env **list, char *content)
+{
+	t_env	*tmp;
+	int		i;
+
+	i = 0;
+	tmp = *list;
+	while (content[i] && content[i] != '=')
+		i++;
+	while (tmp)
+	{
+		if (ft_strncmp(tmp->content, content, i) == 0)
+		{
+			free(tmp->content);
+			tmp->content = ft_strdup(content);
+			return ;
+		}
+		tmp = tmp->next;
+	}
+	env_lstadd_back(list, env_listnew(ft_strdup(content)));
+}
+
+void	replace_or_add_exp(t_exp **list, char *content)
+{
+	t_exp	*tmp;
+	int		i;
+
+	i = 0;
+	tmp = *list;
+	if (!ft_isalpha(content[0]))
+	{
+		printf("minishell: export:`%s': not a valid identifier\n", content);
+		return ;
+	}
+	while (content[i] && content[i] != '=')
+		i++;
+	while (tmp)
+	{
+		if (ft_strncmp(tmp->content, content, i) == 0)
+		{
+			free(tmp->content);
+			tmp->content = ft_strdup(content);
+			return ;
+		}
+		tmp = tmp->next;
+	}
+	export_lstadd_back(list, export_listnew(ft_strdup(content)));
 }

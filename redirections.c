@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirections.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ckarakus <ckarakus@student.42.fr>          +#+  +:+       +#+        */
+/*   By: sisen <sisen@student.42istanbul.com.tr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/12/10 15:27:41 by ckarakus          #+#    #+#             */
-/*   Updated: 2023/12/11 06:07:50 by ckarakus         ###   ########.fr       */
+/*   Created: 2023/12/14 17:04:18 by sisen             #+#    #+#             */
+/*   Updated: 2023/12/14 17:04:19 by sisen            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,9 @@ void	create_file(t_main *main, int mode)
 	int		fd;
 
 	fd = 0;
-	if (mode == 2)
+	if (!main->lexer_list->next)
+		err_unexpected();
+	else if (mode == 2)
 		fd = open(main->lexer_list->next->content, O_CREAT
 				| O_WRONLY | O_TRUNC, 0777);
 	else if (mode == 1)
@@ -57,6 +59,11 @@ void	input(t_main *main)
 {
 	int	fd;
 
+	if (!main->lexer_list->next)
+	{
+		printf("monkeshell: syntax error near unexpected token `newline'\n");
+		exit(1);
+	}
 	fd = open(main->lexer_list->next->content, O_RDONLY, 777);
 	if (fd == -1)
 	{
@@ -86,7 +93,12 @@ void	ft_ctrl(int sig)
 
 void	heredoc(t_main	*main)
 {
-	if (main->heredoc_flag)
+	if (!main->lexer_list->next)
+	{
+		printf("monkeshell: syntax error near unexpected token `newline'\n");
+		exit(1);
+	}
+	else if (main->heredoc_flag)
 		close(main->heredoc_fd[0]);
 	main->heredoc_flag = 1;
 	signal(SIGINT, ft_ctrl);

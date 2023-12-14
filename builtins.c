@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtins.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ckarakus <ckarakus@student.42.fr>          +#+  +:+       +#+        */
+/*   By: sisen <sisen@student.42istanbul.com.tr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/12/09 17:11:13 by ckarakus          #+#    #+#             */
-/*   Updated: 2023/12/10 19:25:50 by ckarakus         ###   ########.fr       */
+/*   Created: 2023/12/14 17:01:33 by sisen             #+#    #+#             */
+/*   Updated: 2023/12/14 17:01:35 by sisen            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,16 +54,19 @@ void	ft_echo(t_main *main)
 		if (!ft_strncmp(main->lexer_list->content, "-n", 2) \
 		&& echo_n_control(main))
 			main->flag = 0;
-		while (main->lexer_list && !ft_strncmp(main->lexer_list->content, "-n", 2)
+		while (main->lexer_list && \
+		!ft_strncmp(main->lexer_list->content, "-n", 2)
 			&& echo_n_control(main))
 			main->lexer_list = main->lexer_list->next;
 		while (main->lexer_list)
 		{
 			if (main->lexer_list->type == ARGUMENT)
-				printf("%s ", main->lexer_list->content);
+				printf("%s", main->lexer_list->content);
 			else if (main->lexer_list->type == PIPE)
 				ft_builtin(main);
 			main->lexer_list = main->lexer_list->next;
+			if (main->lexer_list && main->lexer_list->type == ARGUMENT)
+				printf(" ");
 		}
 	}
 	if (main->flag == 1)
@@ -78,10 +81,10 @@ void	ft_cd(t_main	*main)
 	if (main->lexer_list && main->lexer_list->type == ARGUMENT)
 		main->i = chdir(main->lexer_list->content);
 	else if (!main->lexer_list->next)
-		main->i = chdir("/Users/ckarakus");
+		main->i = chdir("/Users/sisen");
 	else if (main->lexer_list->next && main->lexer_list->next->type == ARGUMENT)
 		printf("cd: too many arguments\n");
-	ft_pwd(main);
+	ft_change_dir(main);
 	if (main->i < 0)
 		printf("cd: no such file or directory: %s\n",
 			main->lexer_list->content);

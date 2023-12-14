@@ -1,22 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_lstdelone.c                                     :+:      :+:    :+:   */
+/*   parser3.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ckarakus <ckarakus@student.42.fr>          +#+  +:+       +#+        */
+/*   By: sisen <sisen@student.42istanbul.com.tr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/12/20 21:26:41 by ckarakus          #+#    #+#             */
-/*   Updated: 2022/12/21 02:48:52 by ckarakus         ###   ########.fr       */
+/*   Created: 2023/12/14 17:04:12 by sisen             #+#    #+#             */
+/*   Updated: 2023/12/14 17:04:13 by sisen            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "minishell.h"
 
-void	ft_lstdelone(t_list *lst, void (*del)(void*))
+void	dollar_manage3(t_main *main, char *string)
 {
-	if (!lst || !del)
-		return ;
-	(*del)(lst->content);
-	free(lst);
-	lst = NULL;
+	main->lexer_list->content = ft_string_join \
+	(main->lexer_list->content, ft_substr(&string[main->a], 0, 1));
 }

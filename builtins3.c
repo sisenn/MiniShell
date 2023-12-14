@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtins3.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ckarakus <ckarakus@student.42.fr>          +#+  +:+       +#+        */
+/*   By: sisen <sisen@student.42istanbul.com.tr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/12/09 21:16:39 by ckarakus          #+#    #+#             */
-/*   Updated: 2023/12/10 12:32:17 by ckarakus         ###   ########.fr       */
+/*   Created: 2023/12/14 17:02:01 by sisen             #+#    #+#             */
+/*   Updated: 2023/12/14 17:02:02 by sisen            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,12 +44,13 @@ void	ft_unset(t_main *main)
 		main->tmp_joined = ft_strjoin(main->lexer_list->content, "=");
 		delete_node_t_exp(&main->export_head, main->tmp_joined);
 		delete_node_t_env(&main->env_head, main->tmp_joined);
+		free(main->tmp_joined);
 	}
 }
 
 int	exit_numeric_control(char *str)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	while (ft_isdigit(str[i]))

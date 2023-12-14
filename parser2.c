@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser2.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ckarakus <ckarakus@student.42.fr>          +#+  +:+       +#+        */
+/*   By: sisen <sisen@student.42istanbul.com.tr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/12/05 10:49:11 by yokten            #+#    #+#             */
-/*   Updated: 2023/12/11 01:46:04 by ckarakus         ###   ########.fr       */
+/*   Created: 2023/12/14 17:04:07 by sisen             #+#    #+#             */
+/*   Updated: 2023/12/14 17:04:08 by sisen            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,10 +34,7 @@ void	dollar_manage(char *string, t_main *main)
 			free(tmp);
 		}
 		else
-		{
-			main->lexer_list->content = ft_string_join \
-			(main->lexer_list->content, ft_substr(&string[main->a], 0, 1));
-		}
+			dollar_manage3(main, string);
 	}
 	free(string);
 	main->a = -1;
@@ -106,11 +103,6 @@ void	redir_manage2(t_main	*main)
 {
 	if (!ft_strncmp(&main->input[main->i], "<<", 2))
 	{
-		if (main->input[main->i + 2] == '>' || main->input[main->i + 2] == '<')
-		{
-			main->err_no = 258;
-			printf("monkeshell: syntax error near unexpected token\n");
-		}
 		main->lexer_list->content = ft_strdup("<<");
 		main->i += 2;
 	}

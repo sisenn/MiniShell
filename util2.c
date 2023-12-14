@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   util2.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ckarakus <ckarakus@student.42.fr>          +#+  +:+       +#+        */
+/*   By: sisen <sisen@student.42istanbul.com.tr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/09 01:26:36 by ckarakus          #+#    #+#             */
-/*   Updated: 2023/12/10 04:23:11 by ckarakus         ###   ########.fr       */
+/*   Updated: 2023/12/14 17:04:41 by sisen            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,20 +55,19 @@ int	ft_strcmp(const char *s1, const char *s2)
 
 void	exit_shell(t_main	*main, int flag)
 {
-	printf("exit\n"); 
+	printf("exit\n");
 	if (flag == 0)
 		exit(0);
-	else if (flag == 1)
-	{
-		printf("numeric argument required\n");
-		exit(255);
-	}
 	else if (flag == 2)
 	{
 		printf("too many arguments\n");
 		main->err_no = 1;
 	}
-
+	else if (flag == 1)
+	{
+		printf("numeric argument required\n");
+		exit(255);
+	}
 }
 
 void	init_lists(char **env, t_main *main)

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec2.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ckarakus <ckarakus@student.42.fr>          +#+  +:+       +#+        */
+/*   By: sisen <sisen@student.42istanbul.com.tr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/12/10 14:51:53 by ckarakus          #+#    #+#             */
-/*   Updated: 2023/12/11 05:45:31 by ckarakus         ###   ########.fr       */
+/*   Created: 2023/12/14 17:02:25 by sisen             #+#    #+#             */
+/*   Updated: 2023/12/14 17:02:26 by sisen            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,4 +34,19 @@ void	child_process(t_main *main)
 		close(main->heredoc_fd[1]);
 	}
 	execve(main->res[main->k], main->arg, main->env2);
+}
+
+void	parse_path2(t_main *main, char *slash_content)
+{
+	main->res = ft_split(&main->env_list->content[5], ':');
+	slash_content = ft_strjoin("/", main->lexer_list->content);
+	while (main->res[++main->z])
+		main->res[main->z] = ft_strjoin(main->res[main->z], slash_content);
+}
+
+void	parse_path3(t_main *main)
+{
+	if (ft_strcmp(main->lexer_list->content, "exit"))
+		printf("command not found: %s\n", main->lexer_list->content);
+	exit(127);
 }
